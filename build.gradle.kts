@@ -5,7 +5,7 @@ plugins {
     `maven-publish`
 }
 
-group = "dev.myshkouski.auth"
+group = "com.github.myshkouski"
 version = "0.1.0-SNAPSHOT"
 
 repositories {
