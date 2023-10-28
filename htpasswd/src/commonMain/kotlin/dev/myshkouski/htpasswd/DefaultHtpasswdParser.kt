@@ -8,7 +8,7 @@ internal class DefaultHtpasswdParser(
     private val allowPlainPasswords: Boolean
 ) : HtpasswdParser, HtpasswdLineParser {
     override fun parse(lines: Array<String>): Array<VerifiableCredentials> {
-        return lines.mapIndexed { index, line ->
+        return lines.mapIndexedNotNull { index, line ->
             try {
                 parseLine(line)
             } catch (e: IllegalStateException) {
@@ -17,8 +17,13 @@ internal class DefaultHtpasswdParser(
         }.toTypedArray()
     }
 
-    override fun parseLine(line: String): VerifiableCredentials {
-        val (username, passwordOrHash) = htpasswdRegex.find(line)?.destructured ?: throw IllegalArgumentException("Invalid line format")
+    override fun parseLine(line: String): VerifiableCredentials? {
+        val trimmedLine = line.trim()
+        if (trimmedLine.isBlank() or trimmedLine.isEmpty() or trimmedLine.startsWith("#")) {
+            // The line is commented out or empty, skip
+            return null
+        }
+        val (username, passwordOrHash) = htpasswdRegex.find(trimmedLine)?.destructured ?: throw IllegalArgumentException("Invalid line format")
         val verifier = when {
             passwordOrHash.startsWith(BCRYPT_FORMAT) -> BcryptHashVerifier(passwordOrHash)
             allowPlainPasswords -> PlainPasswordVerifier(passwordOrHash)
