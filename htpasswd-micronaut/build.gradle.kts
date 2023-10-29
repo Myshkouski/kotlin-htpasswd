@@ -3,11 +3,11 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(17)
 }
 
 dependencies {
     implementation(project(":htpasswd"))
-    compileOnly("io.micronaut.security:micronaut-security:3.+")
+    compileOnly("io.micronaut.security:micronaut-security:4.+")
     compileOnly("io.projectreactor:reactor-core:3.+")
 }
