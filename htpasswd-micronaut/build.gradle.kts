@@ -11,3 +11,11 @@ dependencies {
     compileOnly("io.micronaut.security:micronaut-security:4.+")
     compileOnly("io.projectreactor:reactor-core:3.+")
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("Jvm") {
+            from(components["java"])
+        }
+    }
+}
