@@ -8,6 +8,6 @@ kotlin {
 
 dependencies {
     implementation(project(":htpasswd"))
-    compileOnly("io.micronaut.security:micronaut-security:3.10.0")
-    compileOnly("io.projectreactor:reactor-core:3.5.11")
+    compileOnly("io.micronaut.security:micronaut-security:3.+")
+    compileOnly("io.projectreactor:reactor-core:3.+")
 }
