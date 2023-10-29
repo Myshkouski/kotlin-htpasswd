@@ -1,6 +1,6 @@
 package dev.myshkouski.htpasswd.micronaut
 
-import dev.myshkouski.htpasswd.AbstractAuthenticator
+import dev.myshkouski.htpasswd.HtpasswdAuthenticator
 import dev.myshkouski.htpasswd.HtpasswdParser
 import io.micronaut.core.io.Readable
 import io.micronaut.http.HttpRequest
@@ -13,15 +13,17 @@ import reactor.core.publisher.FluxSink
 import java.io.InputStream
 import java.util.*
 
-abstract class AbstractHtpasswdAuthenticationProvider(
+class HtpasswdAuthenticationProvider(
     htpasswdParser: HtpasswdParser,
     htpasswdLines: Array<String>,
-) : AbstractAuthenticator(htpasswdParser, htpasswdLines), AuthenticationProvider {
+) : AuthenticationProvider {
     constructor(htpasswdParser: HtpasswdParser, input: InputStream): this(htpasswdParser, input.readHtpasswdLines())
     constructor(htpasswdParser: HtpasswdParser, readable: Readable): this(htpasswdParser, readable.asInputStream())
 
+    private val authenticator = HtpasswdAuthenticator(htpasswdParser, htpasswdLines)
+
     private fun AuthenticationRequest<*, *>.emitter() = { emitter: FluxSink<AuthenticationResponse> ->
-        val verified = authenticate(identity as String, secret as String?)
+        val verified = authenticator.authenticate(identity as String, secret as String?)
 
         if (verified) {
             emitter.next(AuthenticationResponse.success(identity as String))
