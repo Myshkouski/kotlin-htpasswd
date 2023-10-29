@@ -10,3 +10,6 @@ plugins {
 }
 
 rootProject.name = "htpasswd"
+include("htpasswd")
+include("htpasswd-micronaut")
+include("htpasswd-ktor")
