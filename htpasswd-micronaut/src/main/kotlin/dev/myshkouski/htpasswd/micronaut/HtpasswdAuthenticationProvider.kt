@@ -14,16 +14,18 @@ import java.util.*
 
 class HtpasswdAuthenticationProvider<T>(
     private val authenticator: HtpasswdAuthenticator,
+    private val response: AuthenticationResponseBuilder = defaultResponse,
 ) : AuthenticationProvider<T> {
-    constructor(htpasswdParser: HtpasswdParser, htpasswdLines: Array<String>): this(HtpasswdAuthenticator(htpasswdParser, htpasswdLines))
-    constructor(htpasswdParser: HtpasswdParser, input: InputStream): this(htpasswdParser, input.readHtpasswdLines())
-    constructor(htpasswdParser: HtpasswdParser, readable: Readable): this(htpasswdParser, readable.asInputStream())
+    constructor(htpasswdParser: HtpasswdParser, htpasswdLines: Array<String>, response: AuthenticationResponseBuilder = defaultResponse): this(HtpasswdAuthenticator(htpasswdParser, htpasswdLines), response)
+    constructor(htpasswdParser: HtpasswdParser, input: InputStream, response: AuthenticationResponseBuilder = defaultResponse): this(htpasswdParser, input.readHtpasswdLines(), response)
+    constructor(htpasswdParser: HtpasswdParser, readable: Readable, response: AuthenticationResponseBuilder = defaultResponse): this(htpasswdParser, readable.asInputStream(), response)
 
     private fun AuthenticationRequest<*, *>.emitter() = { emitter: FluxSink<AuthenticationResponse> ->
-        val verified = authenticator.authenticate(identity as String, secret as String?)
+        val username = identity as String
+        val verified = authenticator.authenticate(username, secret as String?)
 
         if (verified) {
-            emitter.next(AuthenticationResponse.success(identity as String))
+            emitter.next(response(username))
             emitter.complete()
         } else {
             emitter.error(AuthenticationResponse.exception())
@@ -38,4 +40,6 @@ class HtpasswdAuthenticationProvider<T>(
     }
 }
 
+private typealias AuthenticationResponseBuilder = (username: String) -> AuthenticationResponse
 private fun InputStream.readHtpasswdLines() = Scanner(this).asSequence().toList().toTypedArray()
+private val defaultResponse: AuthenticationResponseBuilder = { username -> AuthenticationResponse.success(username) }
