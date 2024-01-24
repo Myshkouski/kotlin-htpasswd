@@ -3,9 +3,9 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(17)
     jvm {
         withSourcesJar()
-        jvmToolchain(8)
         withJava()
         testRuns.named("test") {
             executionTask.configure {
@@ -49,13 +49,13 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("at.favre.lib:bcrypt:0.10.2")
+                implementation(libs.bcrypt)
             }
         }
         val jvmTest by getting
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-js:1.0.0-pre.632")
+                implementation(libs.kotlin.wrappers)
             }
         }
         val jsTest by getting

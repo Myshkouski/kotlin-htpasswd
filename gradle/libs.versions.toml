@@ -1,2 +1,16 @@
 [versions]
-kotlin = "1.9.10"
+kotlin = "1.9.22"
+kotlinWrappers = "1.0.0-pre.632"
+bcrypt = "0.10.2"
+micronautSecurity = "4.5.0"
+ktor = "2.3.7"
+
+[libraries]
+bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
+kotlin-wrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-js", version.ref = "kotlinWrappers" }
+micronaut-security = { module = "io.micronaut.security:micronaut-security", version.ref = "micronautSecurity" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+#= { module = "", version.ref = "" }
+#= { module = "", version.ref = "" }
+#= { module = "", version.ref = "" }
+#= { module = "", version.ref = "" }

@@ -3,9 +3,9 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(17)
     jvm {
         withSourcesJar()
-        jvmToolchain(8)
         withJava()
         testRuns.named("test") {
             executionTask.configure {
@@ -15,16 +15,12 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(project(":htpasswd"))
-                compileOnly("io.ktor:ktor-server-auth:2.+")
-            }
+        commonMain.dependencies {
+            api(projects.htpasswd)
+            compileOnly(libs.ktor.server.auth)
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
     }
 }
