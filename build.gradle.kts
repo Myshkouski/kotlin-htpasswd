@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform") version "1.9.10" apply false
-    kotlin("jvm") version "1.9.10" apply false
+    val kotlinVersion = libs.versions.kotlin.get()
+    kotlin("multiplatform") version kotlinVersion apply false
+    kotlin("jvm") version kotlinVersion apply false
 }
 
 allprojects {
