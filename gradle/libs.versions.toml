@@ -3,7 +3,7 @@ kotlin = "1.9.22"
 kotlinWrappers = "1.0.0-pre.694"
 bcrypt = "0.10.2"
 micronautSecurity = "4.6.1"
-ktor = "2.3.8"
+ktor = "2.3.9"
 
 [libraries]
 bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
