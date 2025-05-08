@@ -15,7 +15,7 @@ class HtpasswdAuthenticationProvider<T, I, S>(
     private val response: AuthenticationResponseBuilder = defaultResponse,
 ) : AuthenticationProvider<T, I, S> {
     constructor(htpasswdParser: HtpasswdParser, htpasswdLines: Array<String>, response: AuthenticationResponseBuilder = defaultResponse): this(HtpasswdAuthenticator(htpasswdParser, htpasswdLines), response)
-    constructor(htpasswdParser: HtpasswdParser, input: InputStream, response: AuthenticationResponseBuilder = defaultResponse): this(htpasswdParser, input.readHtpasswdLines(), response)
+    constructor(htpasswdParser: HtpasswdParser, input: InputStream, response: AuthenticationResponseBuilder = defaultResponse): this(htpasswdParser, input.readHtpasswdLines().toTypedArray(), response)
     constructor(htpasswdParser: HtpasswdParser, readable: Readable, response: AuthenticationResponseBuilder = defaultResponse): this(htpasswdParser, readable.asInputStream(), response)
 
     override fun authenticate(requestContext: T, authRequest: AuthenticationRequest<I, S>): AuthenticationResponse {
@@ -31,5 +31,15 @@ class HtpasswdAuthenticationProvider<T, I, S>(
 }
 
 private typealias AuthenticationResponseBuilder = (username: String) -> AuthenticationResponse
-private fun InputStream.readHtpasswdLines() = Scanner(this).asSequence().toList().toTypedArray()
+private fun InputStream.readHtpasswdLines(): List<String> {
+    return Iterable<String> {
+        iterator {
+            val scanner = Scanner(this@readHtpasswdLines)
+            while (scanner.hasNextLine()) {
+                yield(scanner.nextLine())
+            }
+            scanner.close()
+        }
+    }.toList()
+}
 private val defaultResponse: AuthenticationResponseBuilder = { username -> AuthenticationResponse.success(username) }
