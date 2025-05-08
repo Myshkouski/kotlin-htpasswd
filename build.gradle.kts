@@ -10,7 +10,7 @@ allprojects {
     }
 
     group = "dev.myshkouski.${rootProject.name}"
-    version = "0.1.2-SNAPSHOT"
+    version = "0.1.5-SNAPSHOT"
 }
 
 subprojects {
