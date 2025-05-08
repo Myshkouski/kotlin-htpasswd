@@ -13,21 +13,6 @@ kotlin {
             }
         }
     }
-    js {
-        nodejs()
-        useEsModules()
-        generateTypeScriptDefinitions()
-        binaries.executable()
-//        compilations.all {
-//            packageJson {
-//                // ./gradlew --no-daemon --console=plain -Pscope=orgName clean jsNpmPackage
-//                val scope: String? by project.properties.toMap().withDefault { null }
-//                if (!scope.isNullOrEmpty()) {
-//                    name = "@$scope/" + npmProject.name
-//                }
-//            }
-//        }
-    }
 //    val hostOs = System.getProperty("os.name")
 //    val isArm64 = System.getProperty("os.arch") == "aarch64"
 //    val isMingwX64 = hostOs.startsWith("Windows")
@@ -53,12 +38,6 @@ kotlin {
             }
         }
         val jvmTest by getting
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.kotlin.wrappers)
-            }
-        }
-        val jsTest by getting
 //        val nativeMain by getting
 //        val nativeTest by getting
     }
